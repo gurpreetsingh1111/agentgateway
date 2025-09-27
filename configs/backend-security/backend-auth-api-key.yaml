@@ -1,0 +1,31 @@
+# configs/backend-security/backend-auth-api-key.yaml
+binds:
+- port: 3000
+  listeners:
+  - name: default
+    protocol: HTTP
+    routes:
+    - name: backend-auth-api-key-header
+      match:
+        pathPrefix: "/api-key-header"
+      policies:
+        backendAuth:
+          key: "$BACKEND_API_KEY_HEADER"
+      backends:
+      - http:
+          targets:
+            - host: "http://mock-backend-1:8080"
+
+    - name: backend-auth-api-key-query
+      match:
+        pathPrefix: "/api-key-query"
+      policies:
+        backendAuth:
+          key:
+            file: /etc/agentgateway/keys/mykey.txt
+            type: query
+            queryParam: api_key
+      backends:
+      - http:
+          targets:
+            - host: "http://mock-backend-2:8080"

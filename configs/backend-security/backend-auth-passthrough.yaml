@@ -1,0 +1,17 @@
+# configs/backend-security/backend-auth-passthrough.yaml
+binds:
+- port: 3000
+  listeners:
+  - name: default
+    protocol: HTTP
+    routes:
+    - name: backend-auth-passthrough
+      match:
+        pathPrefix: "/passthrough"
+      policies:
+        backendAuth:
+          passthrough: {}
+      backends:
+      - http:
+          targets:
+            - host: "http://upstream-auth-backend:8080"

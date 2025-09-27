@@ -1,0 +1,19 @@
+# configs/backend-security/backend-tls.yaml
+binds:
+- port: 3000
+  listeners:
+  - name: default
+    protocol: HTTP
+    routes:
+    - name: backend-tls-route
+      match:
+        pathPrefix: "/secure-backend-tls"
+      backends:
+      - http:
+          targets:
+            - host: "https://mock-tls-backend:8443"
+      policies:
+        backendTLS:
+          root: ./certs/root-ca.pem
+          cert: ./certs/client.pem
+          key: ./certs/client-key.pem

@@ -1,0 +1,21 @@
+# configs/backend-security/backend-auth-aws.yaml
+binds:
+- port: 3000
+  listeners:
+  - name: default
+    protocol: HTTP
+    routes:
+    - name: backend-auth-aws
+      match:
+        pathPrefix: "/aws-s3"
+      policies:
+        backendAuth:
+          aws:
+            region: us-west-2
+            service: s3
+            accessKeyId: "$AWS_ACCESS_KEY_ID"
+            secretAccessKey: "$AWS_SECRET_ACCESS_KEY"
+      backends:
+      - http:
+          targets:
+            - host: "https://my-s3-bucket.s3.us-west-2.amazonaws.com"

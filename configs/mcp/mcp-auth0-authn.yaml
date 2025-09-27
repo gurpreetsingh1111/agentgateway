@@ -1,0 +1,27 @@
+# configs/mcp/mcp-auth0-authn.yaml
+# Configures AgentGateway as a Resource Server to validate JWTs from Auth0.
+binds:
+- port: 3000
+  listeners:
+  - name: default
+    protocol: HTTP
+    routes:
+    - name: secure-mcp-route
+      match:
+        pathPrefix: "/secure-mcp"
+      policies:
+        mcpAuthentication:
+          issuer: "https://YOUR_AUTH0_DOMAIN/"
+          jwksUrl: "https://YOUR_AUTH0_DOMAIN/.well-known/jwks.json"
+          resourceMetadata:
+            resource: "https://agentgateway.challenge.com/mcp"
+            scopesSupported:
+              - tools:read
+              - tools:invoke
+            bearerMethodsSupported: [header]
+      backends:
+      - mcp:
+          targets:
+          - name: protected-mcp-backend
+            mcp:
+              host: "http://localhost:3005/mcp/"

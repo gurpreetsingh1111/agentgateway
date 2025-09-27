@@ -1,0 +1,18 @@
+# configs/mcp/mcp-http.yaml
+# Demonstrates connecting to one MCP backend over Streamable HTTP.
+binds:
+- port: 3000
+  listeners:
+  - name: default-mcp-listener
+    protocol: HTTP
+    routes:
+    - name: mcp-http-route
+      match:
+        host: "mcp.example.com"
+        pathPrefix: "/mcp-http"
+      backends:
+      - mcp:
+          targets:
+          - name: topcoder-mcp-http
+            mcp:
+              host: "http://topcoder.mcp.http/mcp/"

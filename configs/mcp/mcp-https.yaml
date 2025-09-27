@@ -1,0 +1,35 @@
+# configs/mcp/mcp-https.yaml
+# Demonstrates connecting multiple MCP backends over Streamable HTTPS with backend TLS.
+binds:
+- port: 3000
+  listeners:
+  - name: default-mcp-listener
+    protocol: HTTP
+    routes:
+    - name: mcp-https-topcoder
+      match:
+        host: "mcp.example.com"
+        pathPrefix: "/mcp-https-tc"
+      backends:
+      - mcp:
+          targets:
+          - name: topcoder-mcp-https
+            mcp:
+              host: "https://topcoder.mcp.https/mcp/"
+      policies:
+        backendTLS:
+          root: ./certs/root-ca.pem
+
+    - name: mcp-https-hf
+      match:
+        host: "mcp.example.com"
+        pathPrefix: "/mcp-https-hf"
+      backends:
+      - mcp:
+          targets:
+          - name: huggingface-mcp-https
+            mcp:
+              host: "https://huggingface.mcp.https/mcp/"
+      policies:
+        backendTLS:
+          root: system

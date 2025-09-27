@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  agentgateway:
+    image: agentgateway:latest
+    volumes:
+      - ./configs:/etc/agentgateway/configs
+      - ./certs:/etc/agentgateway/certs
+      - ./logs:/var/log/agentgateway
+    ports:
+      - "3000:3000"
+
+  mock-backend:
+    image: python:3.11-slim
+    command: sh -c "pip install flask && python /app/mock_backend.py"
+    volumes:
+      - ./scripts/mock_backend.py:/app/mock_backend.py
+    ports:
+      - "3005:3005"

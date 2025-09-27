@@ -1,0 +1,5 @@
+# configs/mcp/mcp-authz-admin-user.yaml
+mcpAuthorization:
+  rules:
+    - 'jwt["permissions"].exists(p, p == "tools:invoke") && mcp.tool.name in ["toolA", "toolB"]'
+    - 'jwt["permissions"].exists(p, p == "tools:read") && mcp.tool.name == "toolA"'
